@@ -5,7 +5,7 @@ import { DATASET_LABEL, SORT_INPUT } from './algorithms/sortInput';
 import { ArrayStage, measureLayout } from './components/ArrayStage';
 import { CallStack } from './components/CallStack';
 import { CompareView } from './components/CompareView';
-import { introStepOf, valueRange } from './lib/steps';
+import { comparisonIndices, introStepOf, valueRange } from './lib/steps';
 import { CodeView } from './components/CodeView';
 import { NumBuddy } from './components/NumBuddy';
 import { SideNav } from './components/SideNav';
@@ -41,8 +41,9 @@ export default function App() {
   const steps = useMemo(() => algo.trace(input), [algo, input]);
   // 比較表示では、長いほうが終わるまで進められる
   const compare = route.compare;
+  // 比較表示では 1 ステップ = 比較 1 回。比較の多いほうが終わり、整列済みの状態を見せるところまで進められる
   const compareTotal = useMemo(
-    () => (compare ? Math.max(...compare.map((id) => findAlgorithm(id)!.trace().length)) : 0),
+    () => (compare ? Math.max(...compare.map((id) => comparisonIndices(findAlgorithm(id)!.trace()).length)) + 1 : 0),
     [compare],
   );
   const total = compare ? compareTotal : steps.length;
@@ -217,7 +218,7 @@ export default function App() {
                 <small>Compare</small>
               </h2>
               <p>
-                同じデータ {'{' + SORT_INPUT.join(', ') + '}'} を、2 つの整列で同時に 1 ステップずつ進めます。先に終わったほうはそこで止まります。
+                同じデータ {'{' + SORT_INPUT.join(', ') + '}'} を 2 つの整列で同時に動かします。1 ステップ = 比較 1 回です。比較が少ないほうが先に「完了！」になります。
               </p>
             </div>
           ) : (
