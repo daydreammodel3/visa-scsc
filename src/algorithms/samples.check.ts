@@ -49,9 +49,16 @@ describe.each(Object.entries(RUNNERS))('%s', (lang, r) => {
   });
 
   // 画面ではサンプルの配列を選んだデータ（最良・最悪）に置きかえて見せるので、置きかえたコードも動くか確かめる
-  const variants = algorithms.flatMap((a) =>
-    (a.datasets ?? []).filter((d) => d.id !== 'standard').map((d) => [`${a.id} (${d.id})`, a, d.input] as const),
-  );
+  // 任意データ：長さや同じ値の有無が違うもの（2〜10 個、0〜99）
+  const CUSTOM = [
+    [42, 7],
+    [3, 3, 1],
+    [0, 99, 50, 50, 7, 7, 7, 99, 0, 1],
+  ];
+  const variants = algorithms.flatMap((a) => [
+    ...(a.datasets ?? []).filter((d) => d.id !== 'standard').map((d) => [`${a.id} (${d.id})`, a, d.input] as const),
+    ...(a.datasets ? CUSTOM.map((c) => [`${a.id} (任意 ${c.length} 個)`, a, c] as const) : []),
+  ]);
   it.skipIf(!ok).each(variants)('%s', (_name, algo, input) => {
     const dir = mkdtempSync(join(tmpdir(), `visa-${lang}-`));
     const file = join(dir, r.file);

@@ -78,7 +78,8 @@ export interface Step {
 }
 
 /** 入力データの種類（整列で、最良・最悪のパターンを選べるようにする） */
-export type DatasetId = 'standard' | 'best' | 'worst';
+/** custom はユーザーが入力したデータ（datasets には入れず、URL で持つ） */
+export type DatasetId = 'standard' | 'best' | 'worst' | 'custom';
 
 export interface Dataset {
   id: DatasetId;

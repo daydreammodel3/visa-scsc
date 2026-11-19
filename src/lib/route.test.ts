@@ -34,3 +34,20 @@ describe('比較表示の route', () => {
     expect(parseHash('#/compare').compare).toEqual(['bubble', 'quick']);
   });
 });
+
+describe('任意データの route', () => {
+  it('往復できる', () => {
+    const a = { algorithmId: 'bubble', step: 3, dataset: 'custom' as const, custom: [9, 4, 7, 1] };
+    expect(toHash(a)).toBe('#/bubble/3/custom/9,4,7,1');
+    expect(parseHash(toHash(a))).toEqual(a);
+    const b = { algorithmId: 'merge', step: 2, dataset: 'custom' as const, custom: [3, 1], compare: ['merge', 'quick'] as [string, string] };
+    expect(toHash(b)).toBe('#/compare/merge/quick/2/3,1');
+    expect(parseHash(toHash(b))).toEqual(b);
+  });
+  it('壊れた任意データや、整列以外では標準に戻る', () => {
+    expect(parseHash('#/bubble/0/custom/1,abc').dataset).toBe('standard');
+    expect(parseHash('#/bubble/0/custom/5').dataset).toBe('standard');
+    expect(parseHash('#/stack/0/custom/1,2').dataset).toBe('standard');
+    expect(parseHash('#/compare/bubble/quick/0/1,999').dataset).toBe('standard');
+  });
+});

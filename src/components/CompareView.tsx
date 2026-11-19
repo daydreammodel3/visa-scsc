@@ -9,6 +9,8 @@ import { SortCompare } from './SortCompare';
 
 interface Props {
   ids: [string, string];
+  /** 整列するデータ（標準か任意） */
+  input: number[];
   step: number;
   fmt: IndexFmt;
   travelMs: number;
@@ -19,7 +21,7 @@ interface Props {
  * 2 つの整列を同じデータで並べて動かす。
  * 1 ステップ = 比較 1 回。比較と比較のあいだの入れかえ・移動は、次の比較へ進むときにまとめて動く。
  */
-export function CompareView({ ids, step, fmt, travelMs, onPick }: Props) {
+export function CompareView({ ids, input, step, fmt, travelMs, onPick }: Props) {
   const choices = compareChoices();
   return (
     <div className="compare">
@@ -28,6 +30,7 @@ export function CompareView({ ids, step, fmt, travelMs, onPick }: Props) {
           <Lane
             key={side}
             algo={findAlgorithm(id)!}
+            input={input}
             step={step}
             fmt={fmt}
             travelMs={travelMs}
@@ -36,13 +39,14 @@ export function CompareView({ ids, step, fmt, travelMs, onPick }: Props) {
           />
         ))}
       </div>
-      <SortCompare sorts={choices} highlight={ids} />
+      <SortCompare sorts={choices} highlight={ids} input={input} />
     </div>
   );
 }
 
 function Lane({
   algo,
+  input,
   step,
   fmt,
   travelMs,
@@ -50,13 +54,14 @@ function Lane({
   onPick,
 }: {
   algo: Algorithm;
+  input: number[];
   step: number;
   fmt: IndexFmt;
   travelMs: number;
   choices: Algorithm[];
   onPick: (id: string) => void;
 }) {
-  const steps = useMemo(() => algo.trace(), [algo]);
+  const steps = useMemo(() => algo.trace(input), [algo, input]);
   const layout = useMemo(() => measureLayout(steps), [steps]);
   const range = useMemo(() => valueRange(steps), [steps]);
   const hasFrames = useMemo(() => steps.some((s) => s.frames), [steps]);

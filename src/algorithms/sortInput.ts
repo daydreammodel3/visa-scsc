@@ -17,6 +17,7 @@ export const DATASET_LABEL: Record<DatasetId, string> = {
   standard: '標準',
   best: '最良',
   worst: '最悪',
+  custom: '任意',
 };
 
 /**

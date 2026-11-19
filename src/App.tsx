@@ -5,6 +5,9 @@ import { DATASET_LABEL, SORT_INPUT } from './algorithms/sortInput';
 import { ArrayStage, measureLayout } from './components/ArrayStage';
 import { CallStack } from './components/CallStack';
 import { CompareView } from './components/CompareView';
+import { CustomBounds } from './components/CustomBounds';
+import { CustomInput } from './components/CustomInput';
+import type { SortId } from './algorithms/bounds';
 import { comparisonIndices, introStepOf, valueRange } from './lib/steps';
 import { CodeView } from './components/CodeView';
 import { NumBuddy } from './components/NumBuddy';
@@ -36,15 +39,19 @@ export default function App() {
   };
 
   const algo = findAlgorithm(route.algorithmId) ?? algorithms[0];
-  const dataset = algo.datasets?.find((d) => d.id === route.dataset);
-  const input = dataset?.input ?? algo.input;
+  // 任意データは整列（datasets を持つアルゴリズム）でだけ使える
+  const custom = route.dataset === 'custom' && route.custom && (algo.datasets || route.compare) ? route.custom : undefined;
+  const dataset = custom ? undefined : algo.datasets?.find((d) => d.id === route.dataset);
+  const datasetId: DatasetId = custom ? 'custom' : (dataset?.id ?? 'standard');
+  const input = custom ?? dataset?.input ?? algo.input;
   const steps = useMemo(() => algo.trace(input), [algo, input]);
-  // 比較表示では、長いほうが終わるまで進められる
   const compare = route.compare;
+  /** 比較表示で使うデータ（標準か任意） */
+  const compareInput = custom ?? SORT_INPUT;
   // 比較表示では 1 ステップ = 比較 1 回。比較の多いほうが終わり、整列済みの状態を見せるところまで進められる
   const compareTotal = useMemo(
-    () => (compare ? Math.max(...compare.map((id) => comparisonIndices(findAlgorithm(id)!.trace()).length)) + 1 : 0),
-    [compare],
+    () => (compare ? Math.max(...compare.map((id) => comparisonIndices(findAlgorithm(id)!.trace(compareInput)).length)) + 1 : 0),
+    [compare, compareInput],
   );
   const total = compare ? compareTotal : steps.length;
   const current = Math.min(route.step, total);
@@ -64,9 +71,9 @@ export default function App() {
 
   // URL のハッシュと同期（共有・ブラウザの戻る に対応）
   useEffect(() => {
-    const next = toHash({ algorithmId: algo.id, step: current, dataset: dataset?.id ?? 'standard', compare });
+    const next = toHash({ algorithmId: algo.id, step: current, dataset: datasetId, custom, compare });
     if (window.location.hash !== next) window.history.replaceState(null, '', next);
-  }, [algo.id, current, dataset?.id, compare]);
+  }, [algo.id, current, datasetId, custom, compare]);
   useEffect(() => {
     const onHash = () => setRoute(parseHash(window.location.hash));
     window.addEventListener('hashchange', onHash);
@@ -78,11 +85,14 @@ export default function App() {
     [total],
   );
 
-  /** 整列どうしで移るときは、選んでいるデータの種類（最良・最悪）を引き継ぐ */
+  /** 整列どうしで移るときは、選んでいるデータの種類（最良・最悪・任意）を引き継ぐ */
   const select = (id: string) => {
     setPlaying(false);
     const next = findAlgorithm(id);
-    setRoute((r) => ({ algorithmId: id, step: 0, dataset: next?.datasets?.some((d) => d.id === r.dataset) ? r.dataset : 'standard' }));
+    setRoute((r) => {
+      if (r.dataset === 'custom' && r.custom && next?.datasets) return { algorithmId: id, step: 0, dataset: 'custom', custom: r.custom };
+      return { algorithmId: id, step: 0, dataset: next?.datasets?.some((d) => d.id === r.dataset) ? r.dataset : 'standard' };
+    });
     if (narrow) setDrawerOpen(false);
   };
 
@@ -92,7 +102,9 @@ export default function App() {
     setRoute((r) => {
       const left = algorithms.find((a) => a.id === r.algorithmId && a.category === '整列')?.id ?? DEFAULT_COMPARE[0];
       const right = left === DEFAULT_COMPARE[1] ? DEFAULT_COMPARE[0] : DEFAULT_COMPARE[1];
-      return { algorithmId: left, step: 0, dataset: 'standard', compare: r.compare ?? [left, right] };
+      // 任意データはそのまま比較にも使う（最良・最悪はアルゴリズムごとに違うので標準に戻す）
+      const keep = r.dataset === 'custom' && r.custom ? { dataset: 'custom' as const, custom: r.custom } : { dataset: 'standard' as const };
+      return { algorithmId: left, step: 0, ...keep, compare: r.compare ?? [left, right] };
     });
     if (narrow) setDrawerOpen(false);
   };
@@ -109,6 +121,11 @@ export default function App() {
   const selectDataset = (d: DatasetId) => {
     setPlaying(false);
     setRoute((r) => ({ ...r, dataset: d, step: 0 }));
+  };
+
+  const applyCustom = (values: number[]) => {
+    setPlaying(false);
+    setRoute((r) => ({ ...r, dataset: 'custom', custom: values, step: 0 }));
   };
 
   useEffect(() => {
@@ -217,9 +234,15 @@ export default function App() {
                 ソートの比較
                 <small>Compare</small>
               </h2>
-              <p>
-                同じデータ {'{' + SORT_INPUT.join(', ') + '}'} を 2 つの整列で同時に動かします。1 ステップ = 比較 1 回です。比較が少ないほうが先に「完了！」になります。
-              </p>
+              <p>同じデータを 2 つの整列で同時に動かします。1 ステップ = 比較 1 回です。比較が少ないほうが先に「完了！」になります。</p>
+              <DataPicker
+                datasets={[{ id: 'standard', input: SORT_INPUT, note: '' }]}
+                current={datasetId}
+                input={compareInput}
+                custom={route.custom}
+                onSelect={selectDataset}
+                onCustom={applyCustom}
+              />
             </div>
           ) : (
             <div className="algo-head">
@@ -229,12 +252,21 @@ export default function App() {
               </h2>
               <span className={`nav-level lv${algo.level}`}>{LEVEL_LABEL[algo.level]}</span>
               <p>{algo.tagline}</p>
-              {algo.datasets && <DataPicker datasets={algo.datasets} current={dataset?.id ?? 'standard'} onSelect={selectDataset} />}
+              {algo.datasets && (
+                <DataPicker
+                  datasets={algo.datasets}
+                  current={datasetId}
+                  input={input}
+                  custom={route.custom}
+                  onSelect={selectDataset}
+                  onCustom={applyCustom}
+                />
+              )}
             </div>
           )}
 
           {compare ? (
-            <CompareView ids={compare} step={current} fmt={fmt} travelMs={travelMs} onPick={pickCompare} />
+            <CompareView ids={compare} input={compareInput} step={current} fmt={fmt} travelMs={travelMs} onPick={pickCompare} />
           ) : (
           <main className="stage">
             <section className={hasFrames ? 'panel panel-array with-stack' : 'panel panel-array'} aria-label="データのようす">
@@ -271,6 +303,7 @@ export default function App() {
                 </div>
               )}
               <VarPanel step={step} prev={prevStep} fmt={fmt} />
+              {custom && <CustomBounds algoId={algo.id as SortId} input={custom} last={steps[steps.length - 1]} />}
             </section>
 
             <section className="panel panel-code" aria-label="コード">
@@ -279,7 +312,7 @@ export default function App() {
                 lang={lang}
                 onLang={setLang}
                 point={step.point}
-                replace={algo.datasets && dataset && dataset.id !== 'standard' ? [SORT_INPUT.join(', '), dataset.input.join(', ')] : undefined}
+                replace={algo.datasets && datasetId !== 'standard' ? [SORT_INPUT.join(', '), input.join(', ')] : undefined}
               />
             </section>
           </main>
@@ -309,25 +342,63 @@ export default function App() {
   );
 }
 
-function DataPicker({ datasets, current, onSelect }: { datasets: Dataset[]; current: DatasetId; onSelect: (d: DatasetId) => void }) {
+function DataPicker({
+  datasets,
+  current,
+  input,
+  custom,
+  onSelect,
+  onCustom,
+}: {
+  datasets: Dataset[];
+  current: DatasetId;
+  input: number[];
+  custom?: number[];
+  onSelect: (d: DatasetId) => void;
+  onCustom: (values: number[]) => void;
+}) {
+  // 「任意」を押しただけでは入力欄を開くだけ。データを確定したら custom になる
+  const [editing, setEditing] = useState(false);
+  const showForm = current === 'custom' || editing;
+  const ids: DatasetId[] = [...datasets.map((d) => d.id), 'custom'];
   return (
     <div className="data-picker">
       <span className="data-picker-label">データ</span>
       <div className="speed" role="radiogroup" aria-label="整列するデータ">
-        {datasets.map((d) => (
-          <button
-            key={d.id}
-            type="button"
-            role="radio"
-            aria-checked={d.id === current}
-            className={d.id === current ? 'on' : ''}
-            onClick={() => onSelect(d.id)}
-          >
-            {DATASET_LABEL[d.id]}
-          </button>
-        ))}
+        {ids.map((id) => {
+          const on = id === 'custom' ? showForm : id === current && !editing;
+          return (
+            <button
+              key={id}
+              type="button"
+              role="radio"
+              aria-checked={on}
+              className={on ? 'on' : ''}
+              onClick={() => {
+                if (id === 'custom') {
+                  if (custom) onSelect('custom');
+                  else setEditing(true);
+                } else {
+                  setEditing(false);
+                  onSelect(id);
+                }
+              }}
+            >
+              {DATASET_LABEL[id]}
+            </button>
+          );
+        })}
       </div>
-      <code className="data-picker-values">{'{' + datasets.find((d) => d.id === current)!.input.join(', ') + '}'}</code>
+      {!showForm && <code className="data-picker-values">{'{' + input.join(', ') + '}'}</code>}
+      {showForm && (
+        <CustomInput
+          initial={custom ?? input}
+          onApply={(v) => {
+            setEditing(false);
+            onCustom(v);
+          }}
+        />
+      )}
     </div>
   );
 }

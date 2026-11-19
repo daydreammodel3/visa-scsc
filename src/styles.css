@@ -861,6 +861,104 @@ button {
   color: var(--accent-ink);
 }
 
+/* 任意データ */
+.custom-input {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-basis: 100%;
+  max-width: 560px;
+}
+.custom-input label {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.custom-input-row {
+  display: flex;
+  gap: 8px;
+}
+.custom-input input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 1rem;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 6px 12px;
+  background: #fff;
+}
+.custom-input input[aria-invalid='true'] {
+  border-color: #fa5252;
+}
+.custom-input button {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-weight: 800;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 3px 0 #d97a1c;
+}
+.custom-error {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #c92a2a;
+}
+.custom-bounds h3 {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+.custom-bounds table {
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.custom-bounds th,
+.custom-bounds td {
+  border: 2px solid var(--line);
+  padding: 2px 10px;
+  text-align: right;
+}
+.custom-bounds thead th {
+  background: #fbf6ee;
+  font-size: 0.78rem;
+  text-align: center;
+}
+.custom-bounds tbody th {
+  text-align: left;
+  font-weight: 700;
+}
+.custom-bounds tr.on th,
+.custom-bounds tr.on td {
+  background: #fff3e2;
+  font-weight: 800;
+}
+.custom-bounds tr.best th {
+  color: #2b8a3e;
+}
+.custom-bounds tr.worst th {
+  color: #c2255c;
+}
+.custom-verdict {
+  margin: 6px 0 0;
+}
+.custom-verdict b {
+  color: var(--accent-ink);
+  font-size: 1.05em;
+}
+.sort-compare-range {
+  font-size: 0.82rem;
+  text-align: left !important;
+}
+.sort-compare-where {
+  text-align: left !important;
+  font-weight: 700;
+}
+
 /* データの選択 */
 .data-picker {
   flex-basis: 100%;
