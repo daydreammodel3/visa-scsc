@@ -1,0 +1,18 @@
+大域: 整数型の配列: stack ← {未定義の値, 未定義の値, 未定義の値, 未定義の値, 未定義の値}
+大域: 整数型: top ← 0
+
+○push(整数型: x)
+  if (top = stackの要素数)  ⟦full⟧
+    return  /* いっぱいなので積めない */
+  endif
+  top ← top + 1  ⟦inc⟧
+  stack[top] ← x  ⟦store⟧
+
+○整数型: pop()
+  整数型: x
+  if (top = 0)  ⟦empty⟧
+    return 未定義の値  /* 空なので取り出せない */
+  endif
+  x ← stack[top]  ⟦take⟧
+  top ← top - 1  ⟦dec⟧
+  return x  ⟦popret⟧

@@ -38,12 +38,13 @@ export function traceInsertion(input: number[]) {
     r.items[i] = null;
     r.held = { item, over: i };
     let j = i - 1;
+    const j0 = j;
     r.push({
       point: 'key',
       vars: vars(i, j, key),
       pointers: ptr(i, j),
       marks: markRange(n, (k) => k < i, 'sorted'),
-      text: (f) => `key = ${key} を持ち上げて、空いた場所を作ります。j = ${f(j)}（そのすぐ左）から比べていきます。`,
+      text: (f) => `key = ${key} を持ち上げて、空いた場所を作ります。j = ${f(j0)}（そのすぐ左）から比べていきます。`,
     });
 
     while (true) {
@@ -82,7 +83,7 @@ export function traceInsertion(input: number[]) {
         vars: vars(i, j, key),
         pointers: ptr(i, j),
         marks: { ...markRange(n, (k) => k <= i && r.items[k] !== null, 'sorted'), [jj + 1]: 'swap' },
-        text: (f) => `${v} を位置 ${f(jj + 1)} へずらし、j を 1 減らして ${f(j)} にします。（実際の配列では data[${f(jj + 1)}] に ${v} がコピーされます）`,
+        text: (f) => `${v} を位置 ${f(jj + 1)} へずらし、j を 1 減らして ${f(jj - 1)} にします。（実際の配列では data[${f(jj + 1)}] に ${v} がコピーされます）`,
       });
     }
 
@@ -125,6 +126,7 @@ export const insertion: Algorithm = {
   ],
   complexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)' },
   input: INPUT,
+  inputIsArray: true,
   trace: () => traceInsertion(INPUT),
   expectedOutput: '1 2 4 5 7 9',
   code: { pseudo, python, js, cpp, rust, ruby, perl },

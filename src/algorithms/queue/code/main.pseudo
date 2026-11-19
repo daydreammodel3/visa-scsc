@@ -1,0 +1,22 @@
+大域: 整数型の配列: queue ← {未定義の値, 未定義の値, 未定義の値, 未定義の値}
+大域: 整数型: head ← 1  /* 先頭（次に取り出す位置） */
+大域: 整数型: tail ← 1  /* 次に入れる位置 */
+大域: 整数型: count ← 0  /* 入っている個数 */
+
+○enqueue(整数型: x)
+  if (count = queueの要素数)  ⟦full⟧
+    return  /* いっぱいなので入れられない */
+  endif
+  queue[tail] ← x  ⟦store⟧
+  tail ← (tail mod queueの要素数) + 1  ⟦tail⟧
+  count ← count + 1  ⟦tail⟧
+
+○整数型: dequeue()
+  整数型: x
+  if (count = 0)  ⟦empty⟧
+    return 未定義の値  /* 空なので取り出せない */
+  endif
+  x ← queue[head]  ⟦take⟧
+  head ← (head mod queueの要素数) + 1  ⟦head⟧
+  count ← count - 1  ⟦head⟧
+  return x  ⟦deqret⟧

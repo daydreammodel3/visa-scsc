@@ -1,0 +1,32 @@
+/* ListElement型: val（値）と next（次の要素への参照）を持つ。ListElement(x) で val = x、next = 未定義 の要素を作る */
+大域: ListElement: listHead ← 未定義の値
+
+○append(整数型: x)
+  ListElement: prev, curr
+  curr ← ListElement(x)  ⟦new⟧
+  if (listHead が 未定義)  ⟦empty⟧
+    listHead ← curr  ⟦sethead⟧
+  else
+    prev ← listHead  ⟦walk0⟧
+    while (prev.next が 未定義でない)  ⟦walk⟧
+      prev ← prev.next  ⟦step⟧
+    endwhile
+    prev.next ← curr  ⟦link⟧
+  endif
+
+○remove(整数型: x)
+  ListElement: prev, curr
+  prev ← 未定義の値  ⟦rstart⟧
+  curr ← listHead  ⟦rstart⟧
+  while (curr が 未定義でない)  ⟦rloop⟧
+    if (curr.val = x)  ⟦rcmp⟧
+      if (prev が 未定義)  ⟦rhead⟧
+        listHead ← curr.next  ⟦unhead⟧
+      else
+        prev.next ← curr.next  ⟦unlink⟧
+      endif
+      return  ⟦rdone⟧
+    endif
+    prev ← curr  ⟦radv⟧
+    curr ← curr.next  ⟦radv⟧
+  endwhile

@@ -94,6 +94,7 @@ export const bubble: Algorithm = {
   ],
   complexity: { best: 'O(n²)', average: 'O(n²)', worst: 'O(n²)', note: '交換がなければ打ち切る改良版は、最良 O(n)' },
   input: INPUT,
+  inputIsArray: true,
   trace: () => traceBubble(INPUT),
   expectedOutput: '1 3 4 5 8',
   code: { pseudo, python, js, cpp, rust, ruby, perl },

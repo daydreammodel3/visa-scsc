@@ -1,0 +1,37 @@
+大域: 整数型の配列: data ← {6, 3, 8, 1, 5, 2}
+大域: 整数型の配列: tmp ← {未定義の値, 未定義の値, 未定義の値, 未定義の値, 未定義の値, 未定義の値}
+
+○mergeSort(整数型: left, 整数型: right)  ⟦call⟧
+  整数型: mid, i, j, k
+  if (left ≧ right)  ⟦base⟧
+    return  ⟦leaf⟧
+  endif
+  mid ← (left + right) ÷ 2 の商  ⟦mid⟧
+  mergeSort(left, mid)  ⟦recL⟧
+  mergeSort(mid + 1, right)  ⟦recR⟧
+  i ← left  ⟦mstart⟧
+  j ← mid + 1  ⟦mstart⟧
+  k ← left  ⟦mstart⟧
+  while (i ≦ mid and j ≦ right)  ⟦mcmp⟧
+    if (data[i] ≦ data[j])  ⟦mcmp⟧
+      tmp[k] ← data[i]  ⟦takeL⟧
+      i ← i + 1  ⟦takeL⟧
+    else
+      tmp[k] ← data[j]  ⟦takeR⟧
+      j ← j + 1  ⟦takeR⟧
+    endif
+    k ← k + 1  ⟦takeL,takeR⟧
+  endwhile
+  while (i ≦ mid)  ⟦restL⟧
+    tmp[k] ← data[i]  ⟦restL⟧
+    i ← i + 1  ⟦restL⟧
+    k ← k + 1  ⟦restL⟧
+  endwhile
+  while (j ≦ right)  ⟦restR⟧
+    tmp[k] ← data[j]  ⟦restR⟧
+    j ← j + 1  ⟦restR⟧
+    k ← k + 1  ⟦restR⟧
+  endwhile
+  for (k を left から right まで 1 ずつ増やす)  ⟦copy⟧
+    data[k] ← tmp[k]  ⟦copy⟧
+  endfor

@@ -1,0 +1,26 @@
+大域: 整数型の配列: data ← {5, 2, 7, 1, 6, 3}
+
+○quickSort(整数型: left, 整数型: right)  ⟦call⟧
+  整数型: p
+  if (left < right)  ⟦base⟧
+    p ← partition(left, right)  ⟦part,pdone⟧
+    quickSort(left, p - 1)  ⟦recL⟧
+    quickSort(p + 1, right)  ⟦recR⟧
+  endif
+
+○整数型: partition(整数型: left, 整数型: right)  ⟦pcall⟧
+  整数型: pivot, i, j, tmp
+  pivot ← data[right]  ⟦pivot⟧
+  i ← left - 1  ⟦pivot⟧
+  for (j を left から right - 1 まで 1 ずつ増やす)  ⟦pcmp⟧
+    if (data[j] ≦ pivot)  ⟦pcmp⟧
+      i ← i + 1  ⟦pswap⟧
+      tmp ← data[i]  ⟦pswap⟧
+      data[i] ← data[j]  ⟦pswap⟧
+      data[j] ← tmp  ⟦pswap⟧
+    endif
+  endfor
+  tmp ← data[i + 1]  ⟦pfinal⟧
+  data[i + 1] ← data[right]  ⟦pfinal⟧
+  data[right] ← tmp  ⟦pfinal⟧
+  return i + 1  ⟦pret⟧

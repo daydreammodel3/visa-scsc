@@ -79,6 +79,7 @@ export const linear: Algorithm = {
   ],
   complexity: { best: 'O(1)', average: 'O(n)', worst: 'O(n)' },
   input: INPUT,
+  inputIsArray: true,
   target: TARGET,
   trace: () => traceLinear(INPUT, TARGET),
   expectedOutput: '3',

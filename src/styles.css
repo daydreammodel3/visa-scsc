@@ -773,6 +773,145 @@ button {
   border-top: 2px solid var(--line);
 }
 
+/* 配列＋コールスタック */
+.panel-array.with-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: 8px;
+  align-items: start;
+  padding-bottom: 8px;
+}
+.panel-array.with-stack:has(.callstack-big) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.stage-wrap {
+  min-width: 0;
+}
+.cell-aux {
+  fill: #eef6ff;
+  stroke: #cfe2f7;
+}
+.cell-aux.cell-empty {
+  fill: #fff;
+  stroke: #b9d3ef;
+}
+.link {
+  fill: none;
+  stroke: #6b6577;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.link-skip {
+  stroke: #e64980;
+  stroke-dasharray: 2 0;
+}
+.link-null {
+  font-size: 15px;
+  font-weight: 700;
+  fill: var(--ink-soft);
+}
+
+.callstack {
+  padding: 8px 8px 4px;
+}
+.callstack h3 {
+  margin: 0 0 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+  letter-spacing: 0.06em;
+}
+.callstack-empty {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.frames {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.frame {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  padding: 4px 10px;
+  background: #fff;
+  animation: frame-in 0.25s ease-out;
+}
+.frame-active {
+  border-color: var(--accent);
+  background: #fff3e2;
+}
+.frame-waiting {
+  opacity: 0.75;
+  background: #fbf6ee;
+}
+.frame-returning {
+  border-color: #40c057;
+  background: #ebfbee;
+}
+.frame-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.35;
+}
+.frame-label {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.frame-note {
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+.frame-state {
+  flex: 0 0 auto;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+.frame-ret {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-weight: 800;
+  color: #2b8a3e;
+}
+.callstack-big .frame {
+  padding: 6px 14px;
+}
+.callstack-big .frame-label {
+  font-size: 1.05rem;
+}
+.callstack-big .frame-note {
+  font-size: 0.85rem;
+}
+.callstack-big .frame-ret {
+  font-size: 1.2rem;
+}
+@keyframes frame-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .frame {
+    animation: none;
+  }
+}
+
 /* スマホ・タブレット */
 @media (max-width: 900px) {
   .shell.nav-open {
@@ -798,6 +937,9 @@ button {
   }
   .code-scroll {
     max-height: 40vh;
+  }
+  .panel-array.with-stack {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 @media (max-width: 560px) {

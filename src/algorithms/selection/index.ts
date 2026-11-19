@@ -123,6 +123,7 @@ export const selection: Algorithm = {
   ],
   complexity: { best: 'O(n²)', average: 'O(n²)', worst: 'O(n²)' },
   input: INPUT,
+  inputIsArray: true,
   trace: () => traceSelection(INPUT),
   expectedOutput: '2 3 4 6 7 9',
   code: { pseudo, python, js, cpp, rust, ruby, perl },

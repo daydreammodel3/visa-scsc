@@ -16,14 +16,34 @@ export interface Item {
  * - out: 探す範囲の外（二分探索）
  * - min: いまの最小値（選択ソート）
  * - miss: 比べたが違った
+ * - pivot: 基準値（クイックソート）
  */
-export type Mark = 'compare' | 'swap' | 'sorted' | 'found' | 'out' | 'min' | 'miss';
+export type Mark = 'compare' | 'swap' | 'sorted' | 'found' | 'out' | 'min' | 'miss' | 'pivot';
 
 /** 配列の位置を指す変数（i, j, low, mid など） */
 export interface Pointer {
   name: string;
   /** 0 始まりの位置。擬似言語では表示時に +1 する。範囲外（-1 や n）も可 */
   index: number;
+  /** 'aux' なら 2 段目の配列（マージソートの tmp）を指す */
+  row?: 'aux';
+}
+
+/** 呼び出し中の関数（コールスタックの 1 段） */
+export interface Frame {
+  /** 段ごとに固定。アニメーション用 */
+  id: number;
+  /** "factorial(3)" など。位置を含むので f で表示用に変換する */
+  label: (f: IndexFmt) => string;
+  /** "3 × factorial(2) の結果を待っている" など */
+  note?: (f: IndexFmt) => string;
+  /** キャラのおなかに出す値（再帰の引数など） */
+  value?: number;
+  /** 返した値 */
+  ret?: number | string;
+  /** ret が配列の位置か（擬似言語では表示時に +1 する） */
+  retIndex?: boolean;
+  state: 'active' | 'waiting' | 'returning';
 }
 
 /** 変数パネルに出す値 */
@@ -43,7 +63,11 @@ export interface Step {
   /** 配列の中身。null は「空いている場所」（挿入ソートで key を持ち上げたあと） */
   items: (Item | null)[];
   /** 配列から持ち上げている要素（挿入ソートの key） */
-  held?: { item: Item; over: number } | null;
+  held?: { item: Item; over: number; mark?: Mark } | null;
+  /** 2 段目の配列（マージソートの作業用配列 tmp） */
+  aux?: (Item | null)[];
+  /** コールスタック。下が最初の呼び出し */
+  frames?: Frame[];
   marks: Partial<Record<number, Mark>>;
   pointers: Pointer[];
   vars: Var[];
@@ -51,6 +75,22 @@ export interface Step {
   stats: { label: string; value: number }[];
   /** 説明文。位置は f で表示用に変換する */
   text: (f: IndexFmt) => string;
+}
+
+/** 図の描き方 */
+export interface View {
+  /** 配列のマスを描くか（線形リストでは描かない） */
+  cells?: boolean;
+  /** となりの要素へ矢印を引くか（線形リスト） */
+  links?: boolean;
+  /** 配列の名前（左に出す） */
+  label?: string;
+  /** 2 段目の配列の名前 */
+  auxLabel?: string;
+  /** 持ち上げた要素の段の名前 */
+  heldLabel?: string;
+  /** 位置の番号を出すか */
+  indices?: boolean;
 }
 
 export interface Algorithm {
@@ -65,8 +105,12 @@ export interface Algorithm {
   /** 科目B で問われやすいところ */
   examPoints: string[];
   complexity: { best: string; average: string; worst: string; note?: string };
-  /** 入力。コードのサンプル入力と同じにする（check:samples で確かめる） */
+  /** 入力。整列・探索ではコードのサンプル入力の配列と同じにする（テストで確かめる） */
   input: number[];
+  /** 図の描き方。省略すると普通の配列 */
+  view?: View;
+  /** 入力の配列がサンプルコードにそのまま書かれているか（整列・探索） */
+  inputIsArray?: boolean;
   target?: number;
   trace: () => Step[];
   /** 最後の結果を各言語のサンプルが出力する文字列（擬似言語以外） */

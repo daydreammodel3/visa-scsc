@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { algorithms, categories, findAlgorithm } from './algorithms';
 import type { LangId, Step } from './algorithms/types';
-import { ArrayStage } from './components/ArrayStage';
+import { ArrayStage, measureLayout } from './components/ArrayStage';
+import { CallStack } from './components/CallStack';
 import { CodeView } from './components/CodeView';
 import { NumBuddy } from './components/NumBuddy';
 import { SideNav } from './components/SideNav';
@@ -36,26 +37,38 @@ export default function App() {
   const total = steps.length;
   const current = Math.min(route.step, total);
 
-  // 0 ステップ目（紹介）は、入力をそのまま並べただけの状態
+  // 0 ステップ目（紹介）は、最初のステップから印・矢印・呼び出しを除いた状態
   const introStep = useMemo<Step>(
     () => ({
       point: null,
-      items: algo.input.map((value, id) => ({ id, value })),
+      items: steps[0].items,
+      ...(steps[0].aux ? { aux: steps[0].aux.map(() => null) } : {}),
+      ...(steps[0].frames ? { frames: [] } : {}),
+      held: null,
       marks: {},
       pointers: [],
       vars: algo.target === undefined ? [] : [{ name: 'target', value: algo.target }],
       stats: [],
       text: () => '',
     }),
-    [algo],
+    [algo, steps],
   );
   const step = current === 0 ? introStep : steps[current - 1];
   const prevStep = current <= 1 ? undefined : steps[current - 2];
 
   const base = findLang(lang)?.base ?? 0;
   const fmt = useCallback((i: number) => i + base, [base]);
-  const range = useMemo<[number, number]>(() => [Math.min(...algo.input), Math.max(...algo.input)], [algo]);
-  const liftRow = useMemo(() => steps.some((s) => s.held), [steps]);
+  // キャラの色は、その画面に出てくる値の範囲で決める
+  const range = useMemo<[number, number]>(() => {
+    const vs = steps.flatMap((s) => [
+      ...[...s.items, ...(s.aux ?? []), s.held?.item ?? null].filter((x) => x !== null).map((x) => x!.value),
+      ...(s.frames ?? []).flatMap((f) => (f.value === undefined ? [] : [f.value])),
+    ]);
+    return vs.length ? [Math.min(...vs), Math.max(...vs)] : [0, 1];
+  }, [steps]);
+  const layout = useMemo(() => measureLayout(steps), [steps]);
+  const hasFrames = useMemo(() => steps.some((s) => s.frames), [steps]);
+  const view = algo.view ?? {};
 
   useEffect(() => save('lang', lang), [lang]);
 
@@ -189,15 +202,21 @@ export default function App() {
           </div>
 
           <main className="stage">
-            <section className="panel panel-array" aria-label="配列のようす">
-              <ArrayStage
-                step={step}
-                range={range}
-                liftRow={liftRow}
-                fmt={fmt}
-                travelMs={travelMs}
-                label={`配列 data: ${step.items.map((it) => it?.value ?? '空き').join(', ')}`}
-              />
+            <section className={hasFrames ? 'panel panel-array with-stack' : 'panel panel-array'} aria-label="データのようす">
+              {layout.slots > 0 && (
+                <div className="stage-wrap">
+                  <ArrayStage
+                    step={step}
+                    layout={layout}
+                    view={view}
+                    range={range}
+                    fmt={fmt}
+                    travelMs={travelMs}
+                    label={`${view.label ?? 'data'}: ${step.items.map((it) => it?.value ?? '空き').join(', ')}`}
+                  />
+                </div>
+              )}
+              {hasFrames && <CallStack frames={step.frames ?? []} fmt={fmt} range={range} buddies={layout.slots === 0} />}
             </section>
 
             <section className="panel panel-explain" aria-live="polite">

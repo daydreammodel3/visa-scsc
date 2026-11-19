@@ -1,0 +1,5 @@
+○整数型: factorial(整数型: n)  ⟦call⟧
+  if (n ≦ 1)  ⟦base⟧
+    return 1  ⟦ret1⟧
+  endif
+  return n × factorial(n - 1)  ⟦rec,ret⟧

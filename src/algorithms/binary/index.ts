@@ -40,12 +40,13 @@ export function traceBinary(input: number[], target: number) {
     ...extra,
   });
 
+  const [low0, high0] = [low, high];
   r.push({
     point: 'init',
     vars: vars(),
     pointers: pointers(),
     marks: outside(),
-    text: (f) => `探す範囲を配列全体にします。low = ${f(low)}（先頭）、high = ${f(high)}（末尾）。二分探索は「昇順に並んでいる」ことが前提です。`,
+    text: (f) => `探す範囲を配列全体にします。low = ${f(low0)}（先頭）、high = ${f(high0)}（末尾）。二分探索は「昇順に並んでいる」ことが前提です。`,
   });
 
   while (true) {
@@ -112,7 +113,7 @@ export function traceBinary(input: number[], target: number) {
         vars: vars(),
         pointers: pointers(),
         marks: outside(),
-        text: (f) => `low を mid + 1 = ${f(low)} にして、左半分を候補から外します。`,
+        text: (f) => `low を mid + 1 = ${f(m + 1)} にして、左半分を候補から外します。`,
       });
     } else {
       high = m - 1;
@@ -121,7 +122,7 @@ export function traceBinary(input: number[], target: number) {
         vars: vars(),
         pointers: pointers(),
         marks: outside(),
-        text: (f) => `high を mid - 1 = ${f(high)} にして、右半分を候補から外します。`,
+        text: (f) => `high を mid - 1 = ${f(m - 1)} にして、右半分を候補から外します。`,
       });
     }
   }
@@ -154,6 +155,7 @@ export const binary: Algorithm = {
   ],
   complexity: { best: 'O(1)', average: 'O(log n)', worst: 'O(log n)' },
   input: INPUT,
+  inputIsArray: true,
   target: TARGET,
   trace: () => traceBinary(INPUT, TARGET),
   expectedOutput: '5',
