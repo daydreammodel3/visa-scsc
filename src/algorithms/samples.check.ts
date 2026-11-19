@@ -12,7 +12,8 @@ import { algorithms } from '.';
 import { stripMarkers } from '../lib/code';
 import type { LangId } from './types';
 
-const has = (cmd: string) => spawnSync(cmd, ['--version'], { stdio: 'ignore' }).status === 0;
+const has = (cmd: string) =>
+  [['--version'], ['-version'], ['version']].some((args) => spawnSync(cmd, args, { stdio: 'ignore' }).status === 0);
 
 const RUNNERS: Record<Exclude<LangId, 'pseudo'>, { tool: string; file: string; run: (dir: string, f: string) => string }> = {
   python: { tool: 'python3', file: 'main.py', run: (_d, f) => execFileSync('python3', [f], { encoding: 'utf8' }) },
@@ -25,6 +26,42 @@ const RUNNERS: Record<Exclude<LangId, 'pseudo'>, { tool: string; file: string; r
     run: (d, f) => {
       const exe = join(d, 'a.out');
       execFileSync('g++', ['-std=c++17', '-Wall', '-Werror', '-o', exe, f]);
+      return execFileSync(exe, { encoding: 'utf8' });
+    },
+  },
+  c: {
+    tool: 'gcc',
+    file: 'main.c',
+    run: (d, f) => {
+      const exe = join(d, 'a.out');
+      execFileSync('gcc', ['-std=c11', '-Wall', '-Wextra', '-Werror', '-o', exe, f]);
+      return execFileSync(exe, { encoding: 'utf8' });
+    },
+  },
+  java: {
+    tool: 'javac',
+    file: 'Main.java',
+    run: (d, f) => {
+      execFileSync('javac', ['-Xlint:all', '-Werror', '-encoding', 'UTF-8', '-d', d, f], { stdio: 'pipe' });
+      return execFileSync('java', ['-cp', d, 'Main'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    },
+  },
+  go: {
+    tool: 'go',
+    file: 'main.go',
+    run: (d, f) => {
+      const exe = join(d, 'main');
+      execFileSync('go', ['build', '-o', exe, f], { cwd: d, env: { ...process.env, GO111MODULE: 'off' } });
+      execFileSync('go', ['vet', f], { cwd: d, env: { ...process.env, GO111MODULE: 'off' }, stdio: 'pipe' });
+      return execFileSync(exe, { encoding: 'utf8' });
+    },
+  },
+  swift: {
+    tool: 'swiftc',
+    file: 'main.swift',
+    run: (d, f) => {
+      const exe = join(d, 'main');
+      execFileSync('swiftc', ['-warnings-as-errors', '-o', exe, f]);
       return execFileSync(exe, { encoding: 'utf8' });
     },
   },
