@@ -1,6 +1,6 @@
 import type { Algorithm, Mark } from '../types';
 import { Recorder } from '../recorder';
-import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
+import { ASCENDING, SORT_INPUT, SORT_OUTPUT, sortDatasets } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -125,7 +125,13 @@ export const selection: Algorithm = {
   complexity: { best: 'O(n²)', average: 'O(n²)', worst: 'O(n²)' },
   input: INPUT,
   inputIsArray: true,
-  trace: () => traceSelection(INPUT),
+  datasets: sortDatasets(
+    ASCENDING,
+    'すでに昇順なので、最小値はいつも範囲の先頭にあり、位置が変わる交換は 0 回です。比較の回数はデータによらず同じです。',
+    [2, 3, 5, 6, 8, 1],
+    '最小値がいつも範囲の末尾にあるので、毎回入れかえが起きます（交換 n-1 回で最大）。選択ソートは比較の回数がデータによらず同じなので、変わるのは交換回数だけです。',
+  ),
+  trace: (input = INPUT) => traceSelection(input),
   expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

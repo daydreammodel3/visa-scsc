@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { algorithms, categories, findAlgorithm } from './algorithms';
-import type { LangId, Step } from './algorithms/types';
+import type { Algorithm, Dataset, DatasetId, LangId, Step } from './algorithms/types';
+import { DATASET_LABEL, SORT_INPUT } from './algorithms/sortInput';
 import { ArrayStage, measureLayout } from './components/ArrayStage';
 import { CallStack } from './components/CallStack';
 import { SortCompare } from './components/SortCompare';
@@ -34,7 +35,9 @@ export default function App() {
   };
 
   const algo = findAlgorithm(route.algorithmId) ?? algorithms[0];
-  const steps = useMemo(() => algo.trace(), [algo]);
+  const dataset = algo.datasets?.find((d) => d.id === route.dataset);
+  const input = dataset?.input ?? algo.input;
+  const steps = useMemo(() => algo.trace(input), [algo, input]);
   const total = steps.length;
   const current = Math.min(route.step, total);
 
@@ -75,9 +78,9 @@ export default function App() {
 
   // URL のハッシュと同期（共有・ブラウザの戻る に対応）
   useEffect(() => {
-    const next = toHash({ algorithmId: algo.id, step: current });
+    const next = toHash({ algorithmId: algo.id, step: current, dataset: dataset?.id ?? 'standard' });
     if (window.location.hash !== next) window.history.replaceState(null, '', next);
-  }, [algo.id, current]);
+  }, [algo.id, current, dataset?.id]);
   useEffect(() => {
     const onHash = () => setRoute(parseHash(window.location.hash));
     window.addEventListener('hashchange', onHash);
@@ -89,10 +92,17 @@ export default function App() {
     [total],
   );
 
+  /** 整列どうしで移るときは、選んでいるデータの種類（最良・最悪）を引き継ぐ */
   const select = (id: string) => {
     setPlaying(false);
-    setRoute({ algorithmId: id, step: 0 });
+    const next = findAlgorithm(id);
+    setRoute((r) => ({ algorithmId: id, step: 0, dataset: next?.datasets?.some((d) => d.id === r.dataset) ? r.dataset : 'standard' }));
     if (narrow) setDrawerOpen(false);
+  };
+
+  const selectDataset = (d: DatasetId) => {
+    setPlaying(false);
+    setRoute((r) => ({ ...r, dataset: d, step: 0 }));
   };
 
   useEffect(() => {
@@ -200,6 +210,7 @@ export default function App() {
             </h2>
             <span className={`nav-level lv${algo.level}`}>{LEVEL_LABEL[algo.level]}</span>
             <p>{algo.tagline}</p>
+            {algo.datasets && <DataPicker datasets={algo.datasets} current={dataset?.id ?? 'standard'} onSelect={selectDataset} />}
           </div>
 
           <main className="stage">
@@ -222,7 +233,7 @@ export default function App() {
 
             <section className="panel panel-explain" aria-live="polite">
               {current === 0 ? (
-                <Intro algo={algo} onSelect={select} />
+                <Intro algo={algo} dataset={dataset} onSelect={select} />
               ) : (
                 <div className="explain" key={current}>
                   <div className="bubble-row">
@@ -240,7 +251,13 @@ export default function App() {
             </section>
 
             <section className="panel panel-code" aria-label="コード">
-              <CodeView code={algo.code} lang={lang} onLang={setLang} point={step.point} />
+              <CodeView
+                code={algo.code}
+                lang={lang}
+                onLang={setLang}
+                point={step.point}
+                replace={algo.datasets && dataset && dataset.id !== 'standard' ? [SORT_INPUT.join(', '), dataset.input.join(', ')] : undefined}
+              />
             </section>
           </main>
 
@@ -268,13 +285,42 @@ export default function App() {
   );
 }
 
-function Intro({ algo, onSelect }: { algo: (typeof algorithms)[number]; onSelect: (id: string) => void }) {
+function DataPicker({ datasets, current, onSelect }: { datasets: Dataset[]; current: DatasetId; onSelect: (d: DatasetId) => void }) {
+  return (
+    <div className="data-picker">
+      <span className="data-picker-label">データ</span>
+      <div className="speed" role="radiogroup" aria-label="整列するデータ">
+        {datasets.map((d) => (
+          <button
+            key={d.id}
+            type="button"
+            role="radio"
+            aria-checked={d.id === current}
+            className={d.id === current ? 'on' : ''}
+            onClick={() => onSelect(d.id)}
+          >
+            {DATASET_LABEL[d.id]}
+          </button>
+        ))}
+      </div>
+      <code className="data-picker-values">{'{' + datasets.find((d) => d.id === current)!.input.join(', ') + '}'}</code>
+    </div>
+  );
+}
+
+function Intro({ algo, dataset, onSelect }: { algo: Algorithm; dataset?: Dataset; onSelect: (id: string) => void }) {
   const sorts = categories.find((c) => c.name === algo.category && c.name === '整列')?.items;
   return (
     <div className="intro">
       {algo.intro.map((p) => (
         <p key={p}>{p}</p>
       ))}
+      {dataset && (
+        <p className={`dataset-note dataset-${dataset.id}`}>
+          <b>{DATASET_LABEL[dataset.id]}のデータ</b>
+          {dataset.note}
+        </p>
+      )}
       {algo.target !== undefined && (
         <p className="intro-target">
           この例では <b>{algo.target}</b> を探します。
@@ -300,7 +346,7 @@ function Intro({ algo, onSelect }: { algo: (typeof algorithms)[number]; onSelect
         </tbody>
       </table>
       {algo.complexity.note && <p className="note">{algo.complexity.note}</p>}
-      {sorts && <SortCompare sorts={sorts} currentId={algo.id} onSelect={onSelect} />}
+      {sorts && <SortCompare sorts={sorts} currentId={algo.id} kind={dataset?.id ?? 'standard'} onSelect={onSelect} />}
       <p className="intro-start">「進む」または → キーで開始</p>
     </div>
   );

@@ -773,6 +773,50 @@ button {
   border-top: 2px solid var(--line);
 }
 
+/* データの選択 */
+.data-picker {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+.data-picker-label {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+.data-picker-values {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.dataset-note {
+  border-radius: 12px;
+  padding: 6px 12px;
+  background: #fbf6ee;
+  border: 2px solid var(--line);
+}
+.dataset-note b {
+  display: block;
+  font-size: 0.8rem;
+}
+.dataset-best {
+  background: #ebfbee;
+  border-color: #b2f2bb;
+}
+.dataset-worst {
+  background: #fff0f6;
+  border-color: #fcc2d7;
+}
+.sort-compare-scroll {
+  overflow-x: auto;
+}
+.sort-compare-data {
+  font-family: var(--mono);
+  text-align: left !important;
+}
+
 /* 整列の比較表 */
 .sort-compare table {
   border-collapse: collapse;

@@ -1,6 +1,6 @@
 import type { Algorithm, Mark, Pointer, Var } from '../types';
 import { Recorder, markRange } from '../recorder';
-import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
+import { ASCENDING, SORT_INPUT, SORT_OUTPUT, sortDatasets } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -216,7 +216,13 @@ export const quick: Algorithm = {
   complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n²)' },
   input: INPUT,
   inputIsArray: true,
-  trace: () => traceQuick(INPUT),
+  datasets: sortDatasets(
+    [1, 2, 6, 5, 8, 3],
+    '基準値（右端）が、毎回なるべく範囲の真ん中の値になる並びです。左右に半分ずつ分かれるので、比較回数が最小になります。',
+    ASCENDING,
+    'すでに昇順だと、右端の基準値がいつも最大値になり、分割しても 1 つしか減りません。比較は n(n-1)/2 回になり、O(n²) です（逆順も同じ回数）。',
+  ),
+  trace: (input = INPUT) => traceQuick(input),
   expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

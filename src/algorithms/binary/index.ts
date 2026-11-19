@@ -157,7 +157,7 @@ export const binary: Algorithm = {
   input: INPUT,
   inputIsArray: true,
   target: TARGET,
-  trace: () => traceBinary(INPUT, TARGET),
+  trace: (input = INPUT) => traceBinary(input, TARGET),
   expectedOutput: '5',
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

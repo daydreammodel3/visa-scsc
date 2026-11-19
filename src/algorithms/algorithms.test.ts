@@ -223,3 +223,34 @@ describe('説明文', () => {
     }
   });
 });
+
+describe('最良・最悪のデータ', () => {
+  const perms = (a: number[]): number[][] =>
+    a.length <= 1 ? [a] : a.flatMap((x, i) => perms([...a.slice(0, i), ...a.slice(i + 1)]).map((p) => [x, ...p]));
+  const sorts = algorithms.filter((a) => a.category === '整列');
+  const cost = (a: (typeof sorts)[number], input: number[]) => {
+    const steps = a.trace(input);
+    const st = new Map(steps[steps.length - 1].stats.map((s) => [s.label, s.value]));
+    return { compares: st.get('比較回数')!, swaps: st.get('交換回数') ?? st.get('移動回数') ?? 0 };
+  };
+
+  it.each(sorts.map((a) => [a.id, a] as const))('%s：標準・最良・最悪がそろい、どれも標準データの並べかえ', (_id, a) => {
+    expect(a.datasets?.map((d) => d.id)).toEqual(['standard', 'best', 'worst']);
+    expect(a.datasets![0].input).toEqual(a.input);
+    const key = (xs: number[]) => [...xs].sort((x, y) => x - y).join();
+    for (const d of a.datasets!) expect(key(d.input)).toBe(key(a.input));
+  });
+
+  // 720 とおりの並べ方をすべて試す。比較回数で決め、比較回数がデータによらず同じ整列は交換回数で決める
+  it.each(sorts.map((a) => [a.id, a] as const))('%s：最良は最小、最悪は最大', (_id, a) => {
+    const all = perms(a.input).map((p) => cost(a, p));
+    const compares = all.map((c) => c.compares);
+    const fixed = Math.min(...compares) === Math.max(...compares);
+    const metric = (c: { compares: number; swaps: number }) => (fixed ? c.swaps : c.compares);
+    const values = all.map(metric);
+    const best = a.datasets!.find((d) => d.id === 'best')!;
+    const worst = a.datasets!.find((d) => d.id === 'worst')!;
+    expect(metric(cost(a, best.input))).toBe(Math.min(...values));
+    expect(metric(cost(a, worst.input))).toBe(Math.max(...values));
+  });
+});

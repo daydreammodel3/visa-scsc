@@ -7,9 +7,11 @@ interface Props {
   lang: LangId;
   onLang: (l: LangId) => void;
   point: string | null;
+  /** 表示するときに置きかえる文字列（選んだデータをサンプルの配列に反映する） */
+  replace?: [string, string];
 }
 
-export function CodeView({ code, lang, onLang, point }: Props) {
+export function CodeView({ code, lang, onLang, point, replace }: Props) {
   const lines = useMemo(() => parseCode(code[lang]), [code, lang]);
   const scroller = useRef<HTMLDivElement>(null);
 
@@ -51,7 +53,7 @@ export function CodeView({ code, lang, onLang, point }: Props) {
                 <span className="ln" aria-hidden="true">
                   {i + 1}
                 </span>
-                <code>{l.text || ' '}</code>
+                <code>{(replace ? l.text.split(replace[0]).join(replace[1]) : l.text) || ' '}</code>
               </li>
             );
           })}

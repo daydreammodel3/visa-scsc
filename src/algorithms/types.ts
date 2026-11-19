@@ -77,6 +77,16 @@ export interface Step {
   text: (f: IndexFmt) => string;
 }
 
+/** 入力データの種類（整列で、最良・最悪のパターンを選べるようにする） */
+export type DatasetId = 'standard' | 'best' | 'worst';
+
+export interface Dataset {
+  id: DatasetId;
+  input: number[];
+  /** なぜこのデータが最良・最悪なのか */
+  note: string;
+}
+
 /** 図の描き方 */
 export interface View {
   /** 配列のマスを描くか（線形リストでは描かない） */
@@ -112,7 +122,10 @@ export interface Algorithm {
   /** 入力の配列がサンプルコードにそのまま書かれているか（整列・探索） */
   inputIsArray?: boolean;
   target?: number;
-  trace: () => Step[];
+  /** データの選択肢（整列のみ）。先頭が標準で、input と同じ */
+  datasets?: Dataset[];
+  /** 入力を省略すると input で動かす */
+  trace: (input?: number[]) => Step[];
   /** 最後の結果を各言語のサンプルが出力する文字列（擬似言語以外） */
   expectedOutput: string;
   code: Record<LangId, string>;

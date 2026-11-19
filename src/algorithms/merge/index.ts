@@ -1,6 +1,6 @@
 import type { Algorithm, Mark, Pointer, Var } from '../types';
 import { Recorder, markRange } from '../recorder';
-import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
+import { DESCENDING, SORT_INPUT, SORT_OUTPUT, sortDatasets } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -191,7 +191,13 @@ export const merge: Algorithm = {
   input: INPUT,
   inputIsArray: true,
   view: { auxLabel: 'tmp' },
-  trace: () => traceMerge(INPUT),
+  datasets: sortDatasets(
+    DESCENDING,
+    'マージのたびに、片方の列が先に全部取り出されて、残りはそのまま写すだけになります。この並びで比較回数が最小になります（昇順でも比較は少なめ）。',
+    [1, 6, 3, 2, 8, 5],
+    '左右の列の値が交互に小さくなっていて、マージのたびに最後まで両方が残ります。比較回数が最大になる並びです。ただしマージソートは最良でも最悪でも O(n log n) です。',
+  ),
+  trace: (input = INPUT) => traceMerge(input),
   expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

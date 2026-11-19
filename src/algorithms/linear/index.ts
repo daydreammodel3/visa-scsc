@@ -81,7 +81,7 @@ export const linear: Algorithm = {
   input: INPUT,
   inputIsArray: true,
   target: TARGET,
-  trace: () => traceLinear(INPUT, TARGET),
+  trace: (input = INPUT) => traceLinear(input, TARGET),
   expectedOutput: '3',
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

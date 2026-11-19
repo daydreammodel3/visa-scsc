@@ -1,6 +1,6 @@
 import type { Algorithm } from '../types';
 import { Recorder, markRange } from '../recorder';
-import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
+import { ASCENDING, DESCENDING, SORT_INPUT, SORT_OUTPUT, sortDatasets } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -128,7 +128,13 @@ export const insertion: Algorithm = {
   complexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)' },
   input: INPUT,
   inputIsArray: true,
-  trace: () => traceInsertion(INPUT),
+  datasets: sortDatasets(
+    ASCENDING,
+    'すでに昇順なので、key はいつもその場所のまま。比較は n-1 回、ずらしは 0 回で、O(n) で終わります。',
+    DESCENDING,
+    '逆順（降順）なので、key を毎回いちばん左まで運びます。比較もずらしも n(n-1)/2 回で最大です。',
+  ),
+  trace: (input = INPUT) => traceInsertion(input),
   expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

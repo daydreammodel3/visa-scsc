@@ -1,6 +1,6 @@
 import type { Algorithm } from '../types';
 import { Recorder } from '../recorder';
-import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
+import { ASCENDING, DESCENDING, SORT_INPUT, SORT_OUTPUT, sortDatasets } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -96,7 +96,13 @@ export const bubble: Algorithm = {
   complexity: { best: 'O(n²)', average: 'O(n²)', worst: 'O(n²)', note: '交換がなければ打ち切る改良版は、最良 O(n)' },
   input: INPUT,
   inputIsArray: true,
-  trace: () => traceBubble(INPUT),
+  datasets: sortDatasets(
+    ASCENDING,
+    'すでに昇順に並んでいるので、入れかえは 0 回です。ただし、このコードは途中で打ち切らないので、比較はいつも n(n-1)/2 回します。',
+    DESCENDING,
+    '逆順（降順）に並んでいると、比べるたびに入れかえが起きます。交換は n(n-1)/2 回で最大です。',
+  ),
+  trace: (input = INPUT) => traceBubble(input),
   expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

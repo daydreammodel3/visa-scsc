@@ -47,4 +47,17 @@ describe.each(Object.entries(RUNNERS))('%s', (lang, r) => {
     writeFileSync(file, stripMarkers(algo.code[lang as LangId]));
     expect(r.run(dir, file).trim()).toBe(algo.expectedOutput);
   });
+
+  // 画面ではサンプルの配列を選んだデータ（最良・最悪）に置きかえて見せるので、置きかえたコードも動くか確かめる
+  const variants = algorithms.flatMap((a) =>
+    (a.datasets ?? []).filter((d) => d.id !== 'standard').map((d) => [`${a.id} (${d.id})`, a, d.input] as const),
+  );
+  it.skipIf(!ok).each(variants)('%s', (_name, algo, input) => {
+    const dir = mkdtempSync(join(tmpdir(), `visa-${lang}-`));
+    const file = join(dir, r.file);
+    const src = stripMarkers(algo.code[lang as LangId]);
+    expect(src).toContain(algo.input.join(', '));
+    writeFileSync(file, src.split(algo.input.join(', ')).join(input.join(', ')));
+    expect(r.run(dir, file).trim()).toBe([...input].sort((x, y) => x - y).join(' '));
+  });
 });
