@@ -1,0 +1,15 @@
+○整数型: binarySearch(整数型の配列: data, 整数型: target)
+  整数型: low, high, mid
+  low ← 1  ⟦init⟧
+  high ← dataの要素数  ⟦init⟧
+  while (low ≦ high)  ⟦loop⟧
+    mid ← (low + high) ÷ 2 の商  ⟦mid⟧
+    if (data[mid] = target)  ⟦cmp⟧
+      return mid  ⟦found⟧
+    elseif (data[mid] < target)  ⟦lt⟧
+      low ← mid + 1  ⟦right⟧
+    else
+      high ← mid - 1  ⟦left⟧
+    endif
+  endwhile
+  return -1  ⟦notfound⟧

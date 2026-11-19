@@ -1,0 +1,11 @@
+○insertionSort(整数型の配列: data)
+  整数型: i, j, key
+  for (i を 2 から dataの要素数 まで 1 ずつ増やす)  ⟦outer⟧
+    key ← data[i]  ⟦key⟧
+    j ← i - 1  ⟦key⟧
+    while (j ≧ 1 and data[j] > key)  ⟦cmp⟧
+      data[j + 1] ← data[j]  ⟦shift⟧
+      j ← j - 1  ⟦shift⟧
+    endwhile
+    data[j + 1] ← key  ⟦insert⟧
+  endfor

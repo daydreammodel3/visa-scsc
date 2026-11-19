@@ -1,0 +1,81 @@
+# アルゴリズムずかん (visa-scsc)
+
+> **VIS**ualize **A**lgorithms as **S**mall, **C**ute, **S**tylized **C**haracters.
+
+基本情報技術者試験（科目B）で出てくるアルゴリズムを、**1 ステップずつ** たどれる学習用 Web アプリです。
+配列の要素は、おなかに自分の値を書いたミニキャラ「かずまる」として並び、比べられたり、入れかわったり、持ち上げられたりします。
+
+## 対応アルゴリズム
+
+| カテゴリ | アルゴリズム | 難しさ | 内容 |
+| --- | --- | --- | --- |
+| 探索 | 線形探索 | 入門 | 先頭から 1 つずつ比べる |
+| 探索 | 二分探索 | 中級 | low・high・mid で範囲を半分ずつにしぼる。範囲外のキャラは眠る |
+| 整列 | バブルソート | 入門 | となりどうしを比べて入れかえる。比較回数・交換回数を表示 |
+| 整列 | 選択ソート | 入門 | 最小値の位置（minIndex）を覚えて、先頭と入れかえる |
+| 整列 | 挿入ソート | 中級 | key を持ち上げ、大きい値を右へずらして空いた場所に入れる |
+
+## 対応言語
+
+コード欄のタブで切り替えられます（選んだ言語はブラウザに保存）。実行中の行が光ります。
+
+- **擬似言語**（IPA 基本情報技術者試験・科目B の記述形式。配列の要素番号は 1 から）
+- Python / JavaScript / C++ / Rust / Ruby / Perl（配列の位置は 0 から）
+
+擬似言語を選ぶと、図の位置の番号や変数 i・j などの値も 1 始まりで表示されます。
+擬似言語以外のサンプルは、そのまま実行できる完全なプログラムです。
+
+## 機能
+
+- 比べる・入れかえる・確定する・見つかる・範囲外 などをキャラの表情と小物で表示
+- 変数パネル（変わった値をハイライト）と、比較回数・交換回数のカウンタ
+- 最初のステップで、アルゴリズムの説明・科目B のチェックポイント・計算量を表示
+- 「最初 / 戻る / 自動再生 / 進む / 最後」ボタン、スライダー、速さ切り替え
+- キーボード操作：`←` `→` で 1 ステップずつ、`Space` で自動再生、`Home` / `End`
+- URL ハッシュ（例 `#/bubble/5`）に状態が入るので、特定のステップをそのまま共有できる
+- スマホでは縦長レイアウト、左メニューはドロワー
+
+## 開発
+
+```bash
+npm install
+npm run dev           # 開発サーバー
+npm test              # トレースとコードの目印の検証
+npm run test:samples  # 各言語のサンプルを実際に実行して出力を確認（python3, node, g++, rustc, ruby, perl を使用。無いものは飛ばす）
+npm run build         # 型チェック + 本番ビルド（dist/）
+```
+
+## Vercel へのデプロイ
+
+Vite の静的サイトなので、リポジトリを Vercel にインポートするだけで動きます（`vercel.json` 同梱）。
+
+- Framework Preset: Vite
+- Build Command: `npm run build`
+- Output Directory: `dist`
+
+## アルゴリズムの追加方法
+
+1. `src/algorithms/<id>/code/` に各言語のコードを置く（`main.pseudo`, `main.py`, `main.js`, `main.cpp`, `main.rs`, `main.rb`, `main.pl`）
+   - 光らせたい行の行末に、コメントで目印 `⟦point⟧` を書く（例：`if data[j] > data[j + 1]:  # ⟦cmp⟧`）。擬似言語は行末に `⟦cmp⟧` だけ
+   - 同じ目印を複数の行に付けると、まとめて光る。1 行に複数付けるときは `⟦a,b⟧`
+   - 目印はコメントの中なので、ファイルはそのまま実行できる
+2. `src/algorithms/<id>/index.ts` に `Algorithm`（`src/algorithms/types.ts`）を書く
+   - `trace()` は `Recorder`（`src/algorithms/recorder.ts`）でアルゴリズムを実際に動かしながら、ステップごとに `point`（目印）・印・矢印・変数・説明文を記録する
+   - 位置は 0 始まりで持ち、説明文では `f(i)` を通して表示する（擬似言語のときに +1 される）
+   - `expectedOutput` はサンプルコードが出力する文字列
+3. `src/algorithms/index.ts` の `categories` に追加する
+4. `npm test` で、すべての言語に同じ目印があるか、入力がそろっているか、整列・探索の結果が正しいかを検証する。`npm run test:samples` でサンプルを実行して確かめる
+
+```
+src/
+  algorithms/  アルゴリズムごとのトレースと各言語のコード、テスト
+  components/  NumBuddy（数字のキャラ）, ArrayStage, CodeView, VarPanel, StepControls, SideNav
+  lib/         コードの目印の解析、URL ハッシュ、文言
+```
+
+## ライセンス
+
+- **ソースコード**: [MIT License](LICENSE)
+- **レッスンの文章と絵**（`src/algorithms/*/index.ts` の説明文、`NumBuddy.tsx`・`favicon.svg` のキャラクター、この README の説明文）: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja)
+
+対象の範囲や表示の例は [LICENSE](LICENSE) を見てください。

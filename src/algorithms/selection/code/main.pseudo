@@ -1,0 +1,13 @@
+○selectionSort(整数型の配列: data)
+  整数型: i, j, minIndex, tmp
+  for (i を 1 から dataの要素数 - 1 まで 1 ずつ増やす)  ⟦outer⟧
+    minIndex ← i  ⟦setmin⟧
+    for (j を i + 1 から dataの要素数 まで 1 ずつ増やす)  ⟦inner⟧
+      if (data[j] < data[minIndex])  ⟦cmp⟧
+        minIndex ← j  ⟦newmin⟧
+      endif
+    endfor
+    tmp ← data[i]  ⟦swap⟧
+    data[i] ← data[minIndex]  ⟦swap⟧
+    data[minIndex] ← tmp  ⟦swap⟧
+  endfor

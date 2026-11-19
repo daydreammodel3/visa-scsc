@@ -1,0 +1,8 @@
+○整数型: linearSearch(整数型の配列: data, 整数型: target)
+  整数型: i
+  for (i を 1 から dataの要素数 まで 1 ずつ増やす)  ⟦loop⟧
+    if (data[i] = target)  ⟦cmp⟧
+      return i  ⟦found⟧
+    endif
+  endfor
+  return -1  ⟦notfound⟧

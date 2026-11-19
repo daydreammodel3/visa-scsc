@@ -1,0 +1,11 @@
+○bubbleSort(整数型の配列: data)
+  整数型: i, j, tmp
+  for (i を dataの要素数 から 2 まで 1 ずつ減らす)  ⟦outer⟧
+    for (j を 1 から i - 1 まで 1 ずつ増やす)  ⟦inner⟧
+      if (data[j] > data[j + 1])  ⟦cmp⟧
+        tmp ← data[j]  ⟦swap⟧
+        data[j] ← data[j + 1]  ⟦swap⟧
+        data[j + 1] ← tmp  ⟦swap⟧
+      endif
+    endfor
+  endfor
