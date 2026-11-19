@@ -3,7 +3,10 @@ import { Recorder, markRange } from '../recorder';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
+import c from './code/main.c?raw';
 import cpp from './code/main.cpp?raw';
+import java from './code/Main.java?raw';
+import go from './code/main.go?raw';
 import rust from './code/main.rs?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
@@ -159,5 +162,5 @@ export const binary: Algorithm = {
   target: TARGET,
   trace: (input = INPUT) => traceBinary(input, TARGET),
   expectedOutput: '5',
-  code: { pseudo, python, js, cpp, rust, ruby, perl },
+  code: { pseudo, python, js, c, cpp, java, go, rust, ruby, perl },
 };

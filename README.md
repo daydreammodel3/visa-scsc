@@ -29,7 +29,7 @@
 コード欄のタブで切り替えられます（選んだ言語はブラウザに保存）。実行中の行が光ります。
 
 - **擬似言語**（IPA 基本情報技術者試験・科目B の記述形式。配列の要素番号は 1 から）
-- Python / JavaScript / C++ / Rust / Ruby / Perl（配列の位置は 0 から）
+- Python / JavaScript / C / C++ / Java / Go / Rust / Ruby / Perl（配列の位置は 0 から）
 
 擬似言語を選ぶと、図の位置の番号や変数 i・j などの値も 1 始まりで表示されます。
 擬似言語以外のサンプルは、そのまま実行できる完全なプログラムです。
@@ -64,7 +64,7 @@
 npm install
 npm run dev           # 開発サーバー
 npm test              # トレースとコードの目印の検証
-npm run test:samples  # 各言語のサンプルを実際に実行して出力を確認（最良・最悪のデータに置きかえたものも。python3, node, g++, rustc, ruby, perl を使用。無いものは飛ばす）
+npm run test:samples  # 各言語のサンプルを実際に実行して出力を確認（最良・最悪・任意のデータに置きかえたものも。python3, node, gcc, g++, javac/java, go, rustc, ruby, perl を使用。無いものは飛ばす）
 npm run build         # 型チェック + 本番ビルド（dist/）
 ```
 
@@ -78,7 +78,7 @@ Vite の静的サイトなので、リポジトリを Vercel にインポート�
 
 ## アルゴリズムの追加方法
 
-1. `src/algorithms/<id>/code/` に各言語のコードを置く（`main.pseudo`, `main.py`, `main.js`, `main.cpp`, `main.rs`, `main.rb`, `main.pl`）
+1. `src/algorithms/<id>/code/` に各言語のコードを置く（`main.pseudo`, `main.py`, `main.js`, `main.c`, `main.cpp`, `Main.java`, `main.go`, `main.rs`, `main.rb`, `main.pl`）
    - 光らせたい行の行末に、コメントで目印 `⟦point⟧` を書く（例：`if data[j] > data[j + 1]:  # ⟦cmp⟧`）。擬似言語は行末に `⟦cmp⟧` だけ
    - 同じ目印を複数の行に付けると、まとめて光る。1 行に複数付けるときは `⟦a,b⟧`
    - 目印はコメントの中なので、ファイルはそのまま実行できる

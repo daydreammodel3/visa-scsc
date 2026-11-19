@@ -3,7 +3,10 @@ import { Recorder } from '../recorder';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
+import c from './code/main.c?raw';
 import cpp from './code/main.cpp?raw';
+import java from './code/Main.java?raw';
+import go from './code/main.go?raw';
 import rust from './code/main.rs?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
@@ -83,5 +86,5 @@ export const linear: Algorithm = {
   target: TARGET,
   trace: (input = INPUT) => traceLinear(input, TARGET),
   expectedOutput: '3',
-  code: { pseudo, python, js, cpp, rust, ruby, perl },
+  code: { pseudo, python, js, c, cpp, java, go, rust, ruby, perl },
 };
