@@ -2,6 +2,8 @@
 
 > **VIS**ualize **A**lgorithms as **S**mall, **C**ute, **S**tylized **C**haracters.
 
+**公開ページ: https://visa.yythzy.com/**
+
 基本情報技術者試験（科目B）で出てくるアルゴリズムを、**1 ステップずつ** たどれる学習用 Web アプリです。
 配列の要素は、おなかに自分の値を書いたミニキャラ「かずまる」として並び、比べられたり、入れかわったり、持ち上げられたりします。
 再帰を使うアルゴリズムでは、コールスタック（呼び出し中の関数の段）も一緒に表示します。
@@ -102,4 +104,6 @@ src/
 - **ソースコード**: [MIT License](LICENSE)
 - **レッスンの文章と絵**（`src/algorithms/*/index.ts` の説明文、`NumBuddy.tsx`・`favicon.svg` のキャラクター、この README の説明文）: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ja)
 
-対象の範囲や表示の例は [LICENSE](LICENSE) を見てください。
+対象の範囲や表示の例は [LICENSE](LICENSE) を見てください。CC BY 4.0 の表示の例:
+
+> アルゴリズムずかん（visa-scsc） https://visa.yythzy.com/ , CC BY 4.0
