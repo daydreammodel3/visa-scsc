@@ -27,7 +27,7 @@ def merge_sort(data, tmp, left, right):  # ⟦call⟧
         data[k] = tmp[k]  # ⟦copy⟧
 
 
-data = [6, 3, 8, 1, 5, 2]
+data = [5, 3, 8, 1, 6, 2]
 tmp = [None] * len(data)
 merge_sort(data, tmp, 0, len(data) - 1)
 print(*data)

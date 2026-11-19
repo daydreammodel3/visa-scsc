@@ -19,6 +19,6 @@ function partition(data, left, right) { // ⟦pcall⟧
   return i + 1; // ⟦pret⟧
 }
 
-const data = [5, 2, 7, 1, 6, 3];
+const data = [5, 3, 8, 1, 6, 2];
 quickSort(data, 0, data.length - 1);
 console.log(data.join(" "));

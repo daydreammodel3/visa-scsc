@@ -33,7 +33,7 @@ function mergeSort(data, tmp, left, right) { // ⟦call⟧
   }
 }
 
-const data = [6, 3, 8, 1, 5, 2];
+const data = [5, 3, 8, 1, 6, 2];
 const tmp = new Array(data.length);
 mergeSort(data, tmp, 0, data.length - 1);
 console.log(data.join(" "));

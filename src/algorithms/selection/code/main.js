@@ -11,6 +11,6 @@ function selectionSort(data) {
   }
 }
 
-const data = [6, 4, 9, 2, 7, 3];
+const data = [5, 3, 8, 1, 6, 2];
 selectionSort(data);
 console.log(data.join(" "));

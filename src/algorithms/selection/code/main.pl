@@ -15,6 +15,6 @@ sub selection_sort {
     }
 }
 
-my @data = (6, 4, 9, 2, 7, 3);
+my @data = (5, 3, 8, 1, 6, 2);
 selection_sort(\@data);
 print "@data\n";

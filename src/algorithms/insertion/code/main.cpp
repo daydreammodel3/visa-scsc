@@ -14,7 +14,7 @@ void insertionSort(std::vector<int>& data) {
 }
 
 int main() {
-    std::vector<int> data = {4, 7, 2, 9, 1, 5};
+    std::vector<int> data = {5, 3, 8, 1, 6, 2};
     insertionSort(data);
     for (std::size_t k = 0; k < data.size(); k++) {
         std::cout << (k ? " " : "") << data[k];

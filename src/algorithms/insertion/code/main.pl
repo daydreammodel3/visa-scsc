@@ -14,6 +14,6 @@ sub insertion_sort {
     }
 }
 
-my @data = (4, 7, 2, 9, 1, 5);
+my @data = (5, 3, 8, 1, 6, 2);
 insertion_sort(\@data);
 print "@data\n";

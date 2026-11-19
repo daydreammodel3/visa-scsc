@@ -8,6 +8,6 @@ function bubbleSort(data) {
   }
 }
 
-const data = [5, 3, 8, 1, 4];
+const data = [5, 3, 8, 1, 6, 2];
 bubbleSort(data);
 console.log(data.join(" "));

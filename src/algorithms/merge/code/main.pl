@@ -37,7 +37,7 @@ sub merge_sort { # ⟦call⟧
     }
 }
 
-my @data = (6, 3, 8, 1, 5, 2);
+my @data = (5, 3, 8, 1, 6, 2);
 my @tmp = (undef) x @data;
 merge_sort(\@data, \@tmp, 0, $#data);
 print "@data\n";

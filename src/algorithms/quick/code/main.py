@@ -16,6 +16,6 @@ def partition(data, left, right):  # ⟦pcall⟧
     return i + 1  # ⟦pret⟧
 
 
-data = [5, 2, 7, 1, 6, 3]
+data = [5, 3, 8, 1, 6, 2]
 quick_sort(data, 0, len(data) - 1)
 print(*data)

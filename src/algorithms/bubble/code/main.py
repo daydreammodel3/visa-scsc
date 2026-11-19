@@ -5,6 +5,6 @@ def bubble_sort(data):
                 data[j], data[j + 1] = data[j + 1], data[j]  # ⟦swap⟧
 
 
-data = [5, 3, 8, 1, 4]
+data = [5, 3, 8, 1, 6, 2]
 bubble_sort(data)
 print(*data)

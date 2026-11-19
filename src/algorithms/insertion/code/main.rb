@@ -10,6 +10,6 @@ def insertion_sort(data)
   end
 end
 
-data = [4, 7, 2, 9, 1, 5]
+data = [5, 3, 8, 1, 6, 2]
 insertion_sort(data)
 puts data.join(" ")

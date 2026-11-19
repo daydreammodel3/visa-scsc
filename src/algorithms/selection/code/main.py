@@ -8,6 +8,6 @@ def selection_sort(data):
         data[i], data[min_index] = data[min_index], data[i]  # ⟦swap⟧
 
 
-data = [6, 4, 9, 2, 7, 3]
+data = [5, 3, 8, 1, 6, 2]
 selection_sort(data)
 print(*data)

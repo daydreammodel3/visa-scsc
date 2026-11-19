@@ -12,6 +12,6 @@ sub bubble_sort {
     }
 }
 
-my @data = (5, 3, 8, 1, 4);
+my @data = (5, 3, 8, 1, 6, 2);
 bubble_sort(\@data);
 print "@data\n";

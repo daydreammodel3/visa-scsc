@@ -37,7 +37,7 @@ void mergeSort(std::vector<int>& data, std::vector<int>& tmp, int left, int righ
 }
 
 int main() {
-    std::vector<int> data = {6, 3, 8, 1, 5, 2};
+    std::vector<int> data = {5, 3, 8, 1, 6, 2};
     std::vector<int> tmp(data.size());
     mergeSort(data, tmp, 0, (int)data.size() - 1);
     for (std::size_t k = 0; k < data.size(); k++) {

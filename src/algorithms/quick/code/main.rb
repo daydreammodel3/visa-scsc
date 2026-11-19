@@ -19,6 +19,6 @@ def partition(data, left, right) # ⟦pcall⟧
   i + 1 # ⟦pret⟧
 end
 
-data = [5, 2, 7, 1, 6, 3]
+data = [5, 3, 8, 1, 6, 2]
 quick_sort(data, 0, data.length - 1)
 puts data.join(" ")

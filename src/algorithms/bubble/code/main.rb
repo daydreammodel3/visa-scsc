@@ -8,6 +8,6 @@ def bubble_sort(data)
   end
 end
 
-data = [5, 3, 8, 1, 4]
+data = [5, 3, 8, 1, 6, 2]
 bubble_sort(data)
 puts data.join(" ")

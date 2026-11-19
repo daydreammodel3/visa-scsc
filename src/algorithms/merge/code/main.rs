@@ -34,7 +34,7 @@ fn merge_sort(data: &mut [i32], tmp: &mut [i32], left: usize, right: usize) { //
 }
 
 fn main() {
-    let mut data = [6, 3, 8, 1, 5, 2];
+    let mut data = [5, 3, 8, 1, 6, 2];
     let mut tmp = [0; 6];
     let last = data.len() - 1;
     merge_sort(&mut data, &mut tmp, 0, last);

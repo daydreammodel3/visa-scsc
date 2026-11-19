@@ -1,5 +1,6 @@
 import type { Algorithm, Mark, Pointer, Var } from '../types';
 import { Recorder, markRange } from '../recorder';
+import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -8,7 +9,7 @@ import rust from './code/main.rs?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
 
-const INPUT = [6, 3, 8, 1, 5, 2];
+const INPUT = SORT_INPUT;
 
 export function traceMerge(input: number[]) {
   const r = new Recorder(input);
@@ -191,6 +192,6 @@ export const merge: Algorithm = {
   inputIsArray: true,
   view: { auxLabel: 'tmp' },
   trace: () => traceMerge(INPUT),
-  expectedOutput: '1 2 3 5 6 8',
+  expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

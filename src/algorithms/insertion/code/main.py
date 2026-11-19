@@ -8,6 +8,6 @@ def insertion_sort(data):
         data[j + 1] = key  # ⟦insert⟧
 
 
-data = [4, 7, 2, 9, 1, 5]
+data = [5, 3, 8, 1, 6, 2]
 insertion_sort(data)
 print(*data)

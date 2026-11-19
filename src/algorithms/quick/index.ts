@@ -1,5 +1,6 @@
 import type { Algorithm, Mark, Pointer, Var } from '../types';
 import { Recorder, markRange } from '../recorder';
+import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -8,7 +9,7 @@ import rust from './code/main.rs?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
 
-const INPUT = [5, 2, 7, 1, 6, 3];
+const INPUT = SORT_INPUT;
 
 export function traceQuick(input: number[]) {
   const r = new Recorder(input);
@@ -216,6 +217,6 @@ export const quick: Algorithm = {
   input: INPUT,
   inputIsArray: true,
   trace: () => traceQuick(INPUT),
-  expectedOutput: '1 2 3 5 6 7',
+  expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

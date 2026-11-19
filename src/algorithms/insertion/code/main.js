@@ -10,6 +10,6 @@ function insertionSort(data) {
   }
 }
 
-const data = [4, 7, 2, 9, 1, 5];
+const data = [5, 3, 8, 1, 6, 2];
 insertionSort(data);
 console.log(data.join(" "));

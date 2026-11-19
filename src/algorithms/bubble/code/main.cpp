@@ -13,7 +13,7 @@ void bubbleSort(std::vector<int>& data) {
 }
 
 int main() {
-    std::vector<int> data = {5, 3, 8, 1, 4};
+    std::vector<int> data = {5, 3, 8, 1, 6, 2};
     bubbleSort(data);
     for (std::size_t k = 0; k < data.size(); k++) {
         std::cout << (k ? " " : "") << data[k];

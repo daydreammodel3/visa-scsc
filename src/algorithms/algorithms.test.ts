@@ -77,6 +77,14 @@ describe.each(algorithms)('$name', (algo) => {
   });
 });
 
+describe('整列のデータ', () => {
+  it('すべての整列が同じ入力を使う（ステップ数を比べられるように）', () => {
+    const sorts = algorithms.filter((a) => a.category === '整列');
+    expect(sorts.length).toBeGreaterThanOrEqual(5);
+    for (const a of sorts) expect(a.input, a.id).toEqual(sorts[0].input);
+  });
+});
+
 describe('整列の結果', () => {
   const rand = lcg(42);
   const cases = [[], [1], [2, 1], [3, 3, 1], [5, 4, 3, 2, 1], [1, 2, 3, 4, 5], ...Array.from({ length: 30 }, () => randomArray(rand, 1 + Math.floor(rand() * 9)))];

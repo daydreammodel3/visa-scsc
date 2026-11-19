@@ -1,5 +1,6 @@
 import type { Algorithm } from '../types';
 import { Recorder } from '../recorder';
+import { SORT_INPUT, SORT_OUTPUT } from '../sortInput';
 import pseudo from './code/main.pseudo?raw';
 import python from './code/main.py?raw';
 import js from './code/main.js?raw';
@@ -8,7 +9,7 @@ import rust from './code/main.rs?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
 
-const INPUT = [5, 3, 8, 1, 4];
+const INPUT = SORT_INPUT;
 
 export function traceBubble(input: number[]) {
   const r = new Recorder(input);
@@ -96,6 +97,6 @@ export const bubble: Algorithm = {
   input: INPUT,
   inputIsArray: true,
   trace: () => traceBubble(INPUT),
-  expectedOutput: '1 3 4 5 8',
+  expectedOutput: SORT_OUTPUT,
   code: { pseudo, python, js, cpp, rust, ruby, perl },
 };

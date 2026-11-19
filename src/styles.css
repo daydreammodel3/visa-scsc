@@ -773,6 +773,45 @@ button {
   border-top: 2px solid var(--line);
 }
 
+/* 整列の比較表 */
+.sort-compare table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+.sort-compare th,
+.sort-compare td {
+  padding: 3px 8px;
+  border: 2px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+.sort-compare thead th {
+  background: #fbf6ee;
+  font-size: 0.78rem;
+  text-align: center;
+}
+.sort-compare tbody th {
+  text-align: left;
+  font-weight: 700;
+}
+.sort-compare tr.on th,
+.sort-compare tr.on td {
+  background: #fff3e2;
+  font-weight: 800;
+}
+.sort-compare .note {
+  margin-top: 6px !important;
+}
+.link-button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-weight: 700;
+  color: var(--accent-ink);
+  text-decoration: underline;
+}
+
 /* 配列＋コールスタック */
 .panel-array.with-stack {
   display: grid;

@@ -33,7 +33,7 @@ def merge_sort(data, tmp, left, right) # ⟦call⟧
   end
 end
 
-data = [6, 3, 8, 1, 5, 2]
+data = [5, 3, 8, 1, 6, 2]
 tmp = Array.new(data.length)
 merge_sort(data, tmp, 0, data.length - 1)
 puts data.join(" ")

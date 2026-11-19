@@ -9,7 +9,7 @@ fn bubble_sort(data: &mut [i32]) {
 }
 
 fn main() {
-    let mut data = [5, 3, 8, 1, 4];
+    let mut data = [5, 3, 8, 1, 6, 2];
     bubble_sort(&mut data);
     let out: Vec<String> = data.iter().map(|x| x.to_string()).collect();
     println!("{}", out.join(" "));

@@ -11,6 +11,6 @@ def selection_sort(data)
   end
 end
 
-data = [6, 4, 9, 2, 7, 3]
+data = [5, 3, 8, 1, 6, 2]
 selection_sort(data)
 puts data.join(" ")

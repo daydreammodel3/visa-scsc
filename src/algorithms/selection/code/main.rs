@@ -12,7 +12,7 @@ fn selection_sort(data: &mut [i32]) {
 }
 
 fn main() {
-    let mut data = [6, 4, 9, 2, 7, 3];
+    let mut data = [5, 3, 8, 1, 6, 2];
     selection_sort(&mut data);
     let out: Vec<String> = data.iter().map(|x| x.to_string()).collect();
     println!("{}", out.join(" "));

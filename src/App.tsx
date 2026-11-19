@@ -3,6 +3,7 @@ import { algorithms, categories, findAlgorithm } from './algorithms';
 import type { LangId, Step } from './algorithms/types';
 import { ArrayStage, measureLayout } from './components/ArrayStage';
 import { CallStack } from './components/CallStack';
+import { SortCompare } from './components/SortCompare';
 import { CodeView } from './components/CodeView';
 import { NumBuddy } from './components/NumBuddy';
 import { SideNav } from './components/SideNav';
@@ -221,7 +222,7 @@ export default function App() {
 
             <section className="panel panel-explain" aria-live="polite">
               {current === 0 ? (
-                <Intro algo={algo} />
+                <Intro algo={algo} onSelect={select} />
               ) : (
                 <div className="explain" key={current}>
                   <div className="bubble-row">
@@ -267,7 +268,8 @@ export default function App() {
   );
 }
 
-function Intro({ algo }: { algo: (typeof algorithms)[number] }) {
+function Intro({ algo, onSelect }: { algo: (typeof algorithms)[number]; onSelect: (id: string) => void }) {
+  const sorts = categories.find((c) => c.name === algo.category && c.name === '整列')?.items;
   return (
     <div className="intro">
       {algo.intro.map((p) => (
@@ -298,6 +300,7 @@ function Intro({ algo }: { algo: (typeof algorithms)[number] }) {
         </tbody>
       </table>
       {algo.complexity.note && <p className="note">{algo.complexity.note}</p>}
+      {sorts && <SortCompare sorts={sorts} currentId={algo.id} onSelect={onSelect} />}
       <p className="intro-start">「進む」または → キーで開始</p>
     </div>
   );

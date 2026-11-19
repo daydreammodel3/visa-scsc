@@ -26,7 +26,7 @@ int partition(std::vector<int>& data, int left, int right) { // ⟦pcall⟧
 }
 
 int main() {
-    std::vector<int> data = {5, 2, 7, 1, 6, 3};
+    std::vector<int> data = {5, 3, 8, 1, 6, 2};
     quickSort(data, 0, (int)data.size() - 1);
     for (std::size_t k = 0; k < data.size(); k++) {
         std::cout << (k ? " " : "") << data[k];

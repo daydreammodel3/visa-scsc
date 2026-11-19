@@ -21,7 +21,7 @@ fn partition(data: &mut [i32], left: isize, right: isize) -> isize { // ⟦pcall
 }
 
 fn main() {
-    let mut data = [5, 2, 7, 1, 6, 3];
+    let mut data = [5, 3, 8, 1, 6, 2];
     let last = data.len() as isize - 1;
     quick_sort(&mut data, 0, last);
     let out: Vec<String> = data.iter().map(|x| x.to_string()).collect();
