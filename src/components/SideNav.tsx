@@ -9,9 +9,11 @@ interface Props {
   onSelect: (id: string) => void;
   onClose?: () => void;
   closeLabel: string;
+  compareActive: boolean;
+  onCompare: () => void;
 }
 
-export function SideNav({ id, categories, currentId, label, onSelect, onClose, closeLabel }: Props) {
+export function SideNav({ id, categories, currentId, label, onSelect, onClose, closeLabel, compareActive, onCompare }: Props) {
   return (
     <nav id={id} className="sidenav" aria-label={label}>
       {onClose && (
@@ -36,6 +38,18 @@ export function SideNav({ id, categories, currentId, label, onSelect, onClose, c
                 </button>
               </li>
             ))}
+            {c.name === '整列' && (
+              <li>
+                <button
+                  type="button"
+                  className={compareActive ? 'nav-item nav-compare on' : 'nav-item nav-compare'}
+                  aria-current={compareActive ? 'page' : undefined}
+                  onClick={onCompare}
+                >
+                  <span className="nav-name">⇄ ソートの比較</span>
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       ))}

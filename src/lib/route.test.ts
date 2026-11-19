@@ -22,3 +22,15 @@ describe('route', () => {
     expect(parseHash('#/bubble/2/nope').dataset).toBe('standard');
   });
 });
+
+describe('比較表示の route', () => {
+  it('往復できる', () => {
+    const r = { algorithmId: 'merge', step: 7, dataset: 'standard' as const, compare: ['merge', 'insertion'] as [string, string] };
+    expect(toHash(r)).toBe('#/compare/merge/insertion/7');
+    expect(parseHash(toHash(r))).toEqual(r);
+  });
+  it('整列以外や知らない ID は既定の組み合わせ', () => {
+    expect(parseHash('#/compare/stack/nope').compare).toEqual(['bubble', 'quick']);
+    expect(parseHash('#/compare').compare).toEqual(['bubble', 'quick']);
+  });
+});
