@@ -56,15 +56,6 @@ const RUNNERS: Record<Exclude<LangId, 'pseudo'>, { tool: string; file: string; r
       return execFileSync(exe, { encoding: 'utf8' });
     },
   },
-  swift: {
-    tool: 'swiftc',
-    file: 'main.swift',
-    run: (d, f) => {
-      const exe = join(d, 'main');
-      execFileSync('swiftc', ['-warnings-as-errors', '-o', exe, f]);
-      return execFileSync(exe, { encoding: 'utf8' });
-    },
-  },
   rust: {
     tool: 'rustc',
     file: 'main.rs',

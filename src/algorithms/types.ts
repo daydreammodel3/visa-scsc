@@ -1,5 +1,5 @@
 /** 対応言語。pseudo は IPA 基本情報技術者試験（科目B）の擬似言語 */
-export type LangId = 'pseudo' | 'python' | 'js' | 'c' | 'cpp' | 'java' | 'go' | 'rust' | 'swift' | 'ruby' | 'perl';
+export type LangId = 'pseudo' | 'python' | 'js' | 'c' | 'cpp' | 'java' | 'go' | 'rust' | 'ruby' | 'perl';
 
 /** 配列の要素。id は要素ごとに固定で、並べ替えのアニメーションに使う */
 export interface Item {

@@ -9,7 +9,6 @@ import cpp from './code/main.cpp?raw';
 import java from './code/Main.java?raw';
 import go from './code/main.go?raw';
 import rust from './code/main.rs?raw';
-import swift from './code/main.swift?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
 
@@ -140,5 +139,5 @@ export const insertion: Algorithm = {
   ),
   trace: (input = INPUT) => traceInsertion(input),
   expectedOutput: SORT_OUTPUT,
-  code: { pseudo, python, js, c, cpp, java, go, rust, swift, ruby, perl },
+  code: { pseudo, python, js, c, cpp, java, go, rust, ruby, perl },
 };

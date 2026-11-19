@@ -8,7 +8,6 @@ import cpp from './code/main.cpp?raw';
 import java from './code/Main.java?raw';
 import go from './code/main.go?raw';
 import rust from './code/main.rs?raw';
-import swift from './code/main.swift?raw';
 import ruby from './code/main.rb?raw';
 import perl from './code/main.pl?raw';
 
@@ -237,5 +236,5 @@ export const linkedlist: Algorithm = {
   view: { cells: false, links: true, indices: false, label: 'リスト', heldLabel: '' },
   trace: () => traceLinkedList(OPS),
   expectedOutput: '3 5 1',
-  code: { pseudo, python, js, c, cpp, java, go, rust, swift, ruby, perl },
+  code: { pseudo, python, js, c, cpp, java, go, rust, ruby, perl },
 };

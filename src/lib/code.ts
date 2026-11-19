@@ -18,7 +18,6 @@ export const LANGS: LangInfo[] = [
   { id: 'java', label: 'Java', ext: 'java', base: 0 },
   { id: 'go', label: 'Go', ext: 'go', base: 0 },
   { id: 'rust', label: 'Rust', ext: 'rs', base: 0 },
-  { id: 'swift', label: 'Swift', ext: 'swift', base: 0 },
   { id: 'ruby', label: 'Ruby', ext: 'rb', base: 0 },
   { id: 'perl', label: 'Perl', ext: 'pl', base: 0 },
 ];
