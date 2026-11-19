@@ -19,6 +19,7 @@ import { DEFAULT_COMPARE, parseHash, toHash } from './lib/route';
 import { load, save } from './lib/storage';
 import { LEVEL_LABEL, UI } from './lib/text';
 import { useMediaQuery } from './lib/useMediaQuery';
+import { SeriesLinks } from './components/SeriesLinks';
 
 export default function App() {
   const [route, setRoute] = useState(() => parseHash(window.location.hash));
@@ -336,6 +337,7 @@ export default function App() {
             <abbr title="VISualize Algorithms as Small, Cute, Stylized Characters.">VISA-SCSC</abbr> — <b>VIS</b>ualize{' '}
             <b>A</b>lgorithms as <b>S</b>mall, <b>C</b>ute, <b>S</b>tylized <b>C</b>haracters.
           </p>
+          <SeriesLinks current="visa" />
         </div>
       </div>
     </div>
